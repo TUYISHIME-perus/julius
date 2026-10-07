@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="church-logo.jpg" type="image/jpeg">
+    <title>Sabbath School program</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0 24px 24px;
+            background: #f2f5f1;
+            color: #20312e;
+            font-family: Arial, sans-serif;
+        }
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            margin: 0 -24px 24px;
+            padding: 10px 20px;
+            background: rgb(23, 13, 110);
+        }
+        .site-brand {
+            margin: 0;
+            color: white;
+            text-align: center;
+            font-size: 1.15rem;
+        }
+        .brand-lockup {
+            display: flex;
+            flex: 0 1 auto;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+        }
+        .site-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 4px 20px;
+        }
+        .site-logo {
+            display: block;
+            width: 64px;
+            height: 64px;
+            flex: 0 0 64px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #000;
+        }
+        .site-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 4px;
+        }
+        @media (max-width: 760px) {
+            .site-nav {
+                justify-content: flex-start;
+                padding: 10px 14px;
+            }
+            .site-links {
+                justify-content: flex-start;
+                width: 100%;
+                gap: 4px 16px;
+            }
+        }
+        section {
+            width: min(100%, 1100px);
+            margin: 0 auto;
+            padding: 28px;
+            background-color: #56b3ca;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.25rem;
+            color: #173f56;
+            margin: 0 0 24px;
+        }
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+            padding: 16px;
+            background: #fff;
+        }
+        label {
+            display: grid;
+            gap: 6px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            min-height: 42px;
+            padding: 9px 10px;
+            border: 1px solid #aab9b6;
+            border-radius: 3px;
+            font: inherit;
+        }
+        .table-wrap {
+            overflow-x: auto;
+            background: #fff;
+        }
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #c7d5ce;
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+        th {
+            background: #d8e8df;
+        }
+        #message {
+            margin: 16px 0 0;
+        }
+        #message.error {
+            color: #8b1e16;
+        }
+        .weekly-studies {
+            margin: 0 auto 20px;
+            padding: 20px;
+            background: #e6f0eb;
+        }
+        .weekly-studies h2 {
+            margin: 0 0 14px;
+            color: #173f56;
+            text-align: center;
+        }
+        .teacher-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 0;
+        }
+        .teacher-list div {
+            min-width: 0;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid #c7d5ce;
+            overflow-wrap: anywhere;
+        }
+        .teacher-list dt {
+            margin-bottom: 6px;
+            color: #5f6f6d;
+            font-weight: 600;
+        }
+        .teacher-list dd {
+            margin: 0;
+        }
+        #weekly-studies-message {
+            margin: 12px 0 0;
+            text-align: center;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 0 12px 12px;
+            }
+            .site-nav {
+                margin: 0 -12px 16px;
+                gap: 4px 12px;
+                padding: 10px;
+            }
+            section {
+                padding: 20px 14px;
+            }
+            .filters {
+                grid-template-columns: minmax(0, 1fr);
+                padding: 12px;
+            }
+            th,
+            td {
+                padding: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="brand-lockup">
+            <img class="site-logo" src="church-logo.jpg" alt="Seventh-day Adventist logo">
+            <h2 class="site-brand">ESTG SDA church programs</h2>
+        </div>
+        <div class="site-links">
+            <a href="index.html">Home</a>
+            <a href="morning.html">Morning program</a>
+            <a href="school sabbath.html" aria-current="page">Sabbath School</a>
+            <a href="admin.html?returnTo=preachers.html">Preachers</a>
+            <a href="https://www.academia.edu/123429509/Indirimbo_Zo_Guhimbaza_Imana_za_500_SDA_Church_500_" target="_blank" rel="noopener noreferrer">Songs of praise of God</a>
+            <a href="https://bibiliya.com/" target="_blank" rel="noopener noreferrer">Holy bible</a>
+            <a href="admin.html">Admin</a>
+        </div>
+    </nav>
+    <section>
+        <h1>Sabbath School program</h1>
+        <section class="weekly-studies" aria-labelledby="weekly-studies-title">
+            <h2 id="weekly-studies-title">Weekly studies</h2>
+            <dl class="teacher-list" id="weekly-teachers"></dl>
+            <p id="weekly-studies-message" aria-live="polite">Loading weekly studies...</p>
+        </section>
+        <div class="filters" aria-label="Search Sabbath School programs">
+            <label for="date-filter">Search by date
+                <input id="date-filter" type="date">
+            </label>
+            <label for="speaker-filter">Search by speaker
+                <input id="speaker-filter" type="search" placeholder="Enter creator speaker name">
+            </label>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Leader</th>
+                        <th scope="col">Prayer within song</th>
+                        <th scope="col">Last Sabbath report</th>
+                        <th scope="col">Creator speaker</th>
+                        <th scope="col">The reporter</th>
+                        <th scope="col">Choir</th>
+                        <th scope="col">Date</th>
+                    </tr>
+                </thead>
+                <tbody id="program-rows"></tbody>
+            </table>
+        </div>
+        <p id="message" aria-live="polite">Loading Sabbath School programs...</p>
+    </section>
+    <script>
+        const storageKey = "morningProgramDashboard";
+        const fields = ["leader", "prayerSong", "lastReport", "creatorSpeaker", "reporter", "choir", "date"];
+        const rows = document.getElementById("program-rows");
+        const message = document.getElementById("message");
+        const dateFilter = document.getElementById("date-filter");
+        const speakerFilter = document.getElementById("speaker-filter");
+        const weeklyTeachers = document.getElementById("weekly-teachers");
+        const weeklyStudiesMessage = document.getElementById("weekly-studies-message");
+        const teacherLabels = [
+            "First teacher", "Second teacher", "Third teacher",
+            "Fourth teacher", "Fifth teacher", "Sixth teacher"
+        ];
+        let programs = [];
+
+        function loadWeeklyStudies() {
+            try {
+                const saved = localStorage.getItem(storageKey);
+                const dashboard = saved ? JSON.parse(saved) : null;
+                const teachers = dashboard && Array.isArray(dashboard.weeklyStudies)
+                    ? dashboard.weeklyStudies
+                    : [];
+                weeklyTeachers.replaceChildren();
+                let hasTeachers = false;
+                teacherLabels.forEach((label, index) => {
+                    const teacher = typeof teachers[index] === "string" ? teachers[index].trim() : "";
+                    if (!teacher) return;
+                    hasTeachers = true;
+                    const item = document.createElement("div");
+                    const term = document.createElement("dt");
+                    const detail = document.createElement("dd");
+                    term.textContent = label;
+                    detail.textContent = teacher;
+                    item.append(term, detail);
+                    weeklyTeachers.appendChild(item);
+                });
+                weeklyStudiesMessage.className = "";
+                weeklyStudiesMessage.textContent = hasTeachers
+                    ? "Weekly study teachers"
+                    : "Weekly studies have not been added yet.";
+            } catch (error) {
+                weeklyTeachers.replaceChildren();
+                weeklyStudiesMessage.className = "error";
+                weeklyStudiesMessage.textContent = "Unable to read saved weekly studies. Reload this page after checking the dashboard data.";
+            }
+        }
+
+        function loadPrograms() {
+            try {
+                const saved = localStorage.getItem(storageKey);
+                if (!saved) {
+                    programs = [];
+                    renderPrograms();
+                    return;
+                }
+                const dashboard = JSON.parse(saved);
+                const entries = dashboard && dashboard.data && Array.isArray(dashboard.data.sabbath)
+                    ? dashboard.data.sabbath
+                    : [];
+                programs = entries.filter(program =>
+                    program && typeof program === "object" &&
+                    fields.every(field => typeof program[field] === "string")
+                );
+                renderPrograms();
+            } catch (error) {
+                programs = [];
+                rows.replaceChildren();
+                message.className = "error";
+                message.textContent = "Unable to read saved Sabbath School programs. Check browser storage and dashboard data, then reload this page.";
+            }
+        }
+
+        function renderPrograms() {
+            const date = dateFilter.value;
+            const speaker = speakerFilter.value.trim().toLowerCase();
+            const matches = programs
+                .filter(program => !date || program.date === date)
+                .filter(program => !speaker || program.creatorSpeaker.toLowerCase().includes(speaker))
+                .sort((a, b) => a.date.localeCompare(b.date));
+
+            rows.replaceChildren();
+            matches.forEach(program => {
+                const row = document.createElement("tr");
+                fields.forEach(field => {
+                    const cell = document.createElement("td");
+                    cell.textContent = program[field];
+                    row.appendChild(cell);
+                });
+                rows.appendChild(row);
+            });
+
+            message.className = "";
+            message.textContent = matches.length
+                ? matches.length + (matches.length === 1 ? " Sabbath School program" : " Sabbath School programs")
+                : programs.length
+                    ? "No Sabbath School programs match your search."
+                    : "No Sabbath School programs have been added in the dashboard yet.";
+        }
+
+        dateFilter.addEventListener("input", renderPrograms);
+        speakerFilter.addEventListener("input", renderPrograms);
+        window.addEventListener("storage", event => {
+            if (event.key === storageKey || event.key === null) {
+                loadPrograms();
+                loadWeeklyStudies();
+            }
+        });
+
+        loadPrograms();
+        loadWeeklyStudies();
+    </script>
+</body>
+</html>

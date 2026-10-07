@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="church-logo.jpg" type="image/jpeg">
+    <title>Admin login</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            margin: 0;
+            background-color: whitesmoke;
+        }
+        .site-nav{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            padding: 10px 20px;
+            background: rgb(23, 13, 110);
+        }
+        .site-brand{
+            margin: 0;
+            color: #fff;
+            text-align: center;
+            font-size: 1.15rem;
+        }
+        .brand-lockup{
+            display: flex;
+            flex: 0 1 auto;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+        }
+        .site-links{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 4px 20px;
+        }
+        .site-logo{
+            display: block;
+            width: 64px;
+            height: 64px;
+            flex: 0 0 64px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #000;
+        }
+        .site-nav a{
+            color: white;
+            text-decoration: none;
+            padding: 8px 4px;
+        }
+        @media (max-width: 760px){
+            .site-nav{
+                justify-content: flex-start;
+                padding: 10px 14px;
+            }
+            .site-links{
+                justify-content: flex-start;
+                width: 100%;
+                gap: 4px 16px;
+            }
+        }
+        .container{background-color: rgb(50, 60, 202);width: min(100% - 32px, 360px);
+            border: solid 1px green;border-radius: 5px;justify-content: center;
+            align-items: center;margin: 24px auto 0;padding: 24px;box-sizing: border-box;
+        }
+        input{
+            margin: 5px;
+            padding: 8px;
+            border: solid 1px rgb(12, 56, 12);
+            border-radius: 10px;
+            box-sizing: border-box;
+            width: 100%;
+
+        }
+        button{
+            background-color: rgb(16, 161, 16);
+            padding: 10px 16px;
+            border-radius: 8px;
+
+        }
+        .container + .container{
+            margin-top: 20px;
+        }
+        h2{
+            margin-bottom: 12px;
+        }
+        .message{
+            margin-top: 10px;
+        }
+        @media (max-width: 480px){
+            .container{
+                margin-top: 20px;
+                padding: 18px;
+            }
+            input{
+                margin: 5px 0;
+                font-size: 16px;
+            }
+            button{
+                min-height: 44px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="brand-lockup">
+            <img class="site-logo" src="church-logo.jpg" alt="Seventh-day Adventist logo">
+            <h1 class="site-brand">ESTG SDA church programs</h1>
+        </div>
+        <div class="site-links">
+            <a href="index.html">Home</a>
+            <a href="morning.html">Morning program</a>
+            <a href="school sabbath.html">Sabbath School</a>
+            <a href="preachers.html">Preachers</a>
+            <a href="https://www.academia.edu/123429509/Indirimbo_Zo_Guhimbaza_Imana_za_500_SDA_Church_500_" target="_blank" rel="noopener noreferrer">Songs of praise of God</a>
+            <a href="https://bibiliya.com/" target="_blank" rel="noopener noreferrer">Holy bible</a>
+            <a href="admin.html" aria-current="page">Admin</a>
+        </div>
+    </nav>
+    <form class="container" id="loginForm">
+       <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="username" required><br><br>
+       <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required><br><br>
+       <button id="submit" type="submit">Login</button>
+       <p class="message" id="loginError" role="alert" aria-live="polite"></p>
+    </form>
+    <form class="container" id="changePasswordForm">
+       <h2>Change password</h2>
+       <input type="password" id="authorizationPassword" placeholder="Enter current password" autocomplete="current-password" required>
+       <input type="password" id="newPassword" placeholder="Create a new password" autocomplete="new-password" required>
+       <input type="password" id="confirmPassword" placeholder="Confirm the new password" autocomplete="new-password" required>
+       <button type="submit">Save new password</button>
+       <p class="message" id="changePasswordMessage" role="status" aria-live="polite"></p>
+    </form>
+    <script>
+        const requestedDestination = new URLSearchParams(window.location.search).get("returnTo");
+        const loginDestination = requestedDestination === "preachers.html"
+            ? "preachers.html"
+            : "program-dashboard.html";
+
+        async function sendAuthRequest(endpoint, details) {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify(details)
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "The request could not be completed.");
+            return result;
+        }
+
+        document.getElementById("loginForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const message = document.getElementById("loginError");
+            message.textContent = "";
+            try {
+                await sendAuthRequest("/api/login", {
+                    email: document.getElementById("email").value,
+                    password: document.getElementById("password").value
+                });
+                window.location.assign(loginDestination);
+            } catch (error) {
+                message.textContent = error.message || "Unable to sign in. Check that the site server is running.";
+            }
+        });
+
+        document.getElementById("changePasswordForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const currentPassword = document.getElementById("authorizationPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const message = document.getElementById("changePasswordMessage");
+            message.textContent = "";
+
+            if (newPassword !== confirmPassword) {
+                message.textContent = "The new passwords do not match.";
+                return;
+            }
+            try {
+                await sendAuthRequest("/api/change-password", { currentPassword, newPassword });
+                message.textContent = "Password changed. Sign in again with the new password.";
+                document.getElementById("changePasswordForm").reset();
+            } catch (error) {
+                message.textContent = error.message || "Unable to change the password. Check that the site server is running.";
+            }
+        });
+    </script>
+</body>
+</html>

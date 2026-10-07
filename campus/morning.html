@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="church-logo.jpg" type="image/jpeg">
+    <title>SDA church morning program</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0 24px 24px;
+            background: #f2f5f1;
+            color: #20312e;
+            font-family: Arial, sans-serif;
+        }
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px 24px;
+            margin: 0 -24px 24px;
+            padding: 10px 20px;
+            background: rgb(23, 13, 110);
+        }
+        .site-brand {
+            margin: 0;
+            color: white;
+            text-align: center;
+            font-size: 1.15rem;
+        }
+        .brand-lockup {
+            display: flex;
+            flex: 0 1 auto;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+        }
+        .site-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 4px 20px;
+        }
+        .site-logo {
+            display: block;
+            width: 64px;
+            height: 64px;
+            flex: 0 0 64px;
+            border-radius: 50%;
+            object-fit: contain;
+            background: #000;
+        }
+        .site-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 4px;
+        }
+        @media (max-width: 760px) {
+            .site-nav {
+                justify-content: flex-start;
+                padding: 10px 14px;
+            }
+            .site-links {
+                justify-content: flex-start;
+                width: 100%;
+                gap: 4px 16px;
+            }
+        }
+        section {
+            width: min(100%, 900px);
+            margin: 0 auto;
+            padding: 28px;
+            background-color: #56b3ca;
+        }
+        h1 {
+            text-align: center;
+            font-size: 1.25rem;
+            color: #173f56;
+            margin: 0 0 24px;
+        }
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+            padding: 16px;
+            background: #fff;
+        }
+        label {
+            display: grid;
+            gap: 6px;
+            font-weight: 600;
+        }
+        input {
+            width: 100%;
+            min-height: 42px;
+            padding: 9px 10px;
+            border: 1px solid #aab9b6;
+            border-radius: 3px;
+            font: inherit;
+        }
+        .table-wrap {
+            overflow-x: auto;
+            background: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #c7d5ce;
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+        th {
+            background: #d8e8df;
+        }
+        #message {
+            margin: 16px 0 0;
+        }
+        #message.error {
+            color: #8b1e16;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 0 12px 12px;
+            }
+            .site-nav {
+                margin: 0 -12px 16px;
+                gap: 4px 12px;
+                padding: 10px;
+            }
+            section {
+                padding: 20px 14px;
+            }
+            .filters {
+                grid-template-columns: minmax(0, 1fr);
+                padding: 12px;
+            }
+            th,
+            td {
+                padding: 9px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="site-nav" aria-label="Main navigation">
+        <div class="brand-lockup">
+            <img class="site-logo" src="church-logo.jpg" alt="Seventh-day Adventist logo">
+            <h2 class="site-brand">ESTG SDA church programs</h2>
+        </div>
+        <div class="site-links">
+            <a href="index.html">Home</a>
+            <a href="morning.html" aria-current="page">Morning program</a>
+            <a href="school sabbath.html">Sabbath School</a>
+            <a href="admin.html?returnTo=preachers.html">Preachers</a>
+            <a href="https://www.academia.edu/123429509/Indirimbo_Zo_Guhimbaza_Imana_za_500_SDA_Church_500_" target="_blank" rel="noopener noreferrer">Songs of praise of God</a>
+            <a href="https://bibiliya.com/" target="_blank" rel="noopener noreferrer">Holy bible</a>
+            <a href="admin.html">Admin</a>
+        </div>
+    </nav>
+    <section>
+        <h1>Morning program</h1>
+        <div class="filters" aria-label="Search morning programs">
+            <label for="date-filter">Search by date
+                <input id="date-filter" type="date">
+            </label>
+            <label for="preacher-filter">Search by preacher
+                <input id="preacher-filter" type="search" placeholder="Enter preacher name">
+            </label>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Leader</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Preacher</th>
+                    </tr>
+                </thead>
+                <tbody id="program-rows"></tbody>
+            </table>
+        </div>
+        <p id="message" aria-live="polite">Loading morning programs...</p>
+    </section>
+    <script>
+        const storageKey = "morningProgramDashboard";
+        const rows = document.getElementById("program-rows");
+        const message = document.getElementById("message");
+        const dateFilter = document.getElementById("date-filter");
+        const preacherFilter = document.getElementById("preacher-filter");
+        let programs = [];
+
+        function loadPrograms() {
+            try {
+                const saved = localStorage.getItem(storageKey);
+                if (!saved) {
+                    programs = [];
+                    renderPrograms();
+                    return;
+                }
+                const dashboard = JSON.parse(saved);
+                const entries = dashboard && dashboard.data && Array.isArray(dashboard.data.morning)
+                    ? dashboard.data.morning
+                    : dashboard && Array.isArray(dashboard.entries)
+                        ? dashboard.entries
+                        : [];
+                programs = entries.filter(program =>
+                    program && typeof program === "object" &&
+                    typeof program.leader === "string" &&
+                    typeof program.date === "string" &&
+                    typeof program.preacher === "string"
+                );
+                renderPrograms();
+            } catch (error) {
+                programs = [];
+                rows.replaceChildren();
+                message.className = "error";
+                message.textContent = "Unable to read saved morning programs. Check browser storage and dashboard data, then reload this page.";
+            }
+        }
+
+        function renderPrograms() {
+            const date = dateFilter.value;
+            const preacher = preacherFilter.value.trim().toLowerCase();
+            const matches = programs
+                .filter(program => !date || program.date === date)
+                .filter(program => !preacher || program.preacher.toLowerCase().includes(preacher))
+                .sort((a, b) => a.date.localeCompare(b.date));
+
+            rows.replaceChildren();
+            matches.forEach(program => {
+                const row = document.createElement("tr");
+                [program.leader, program.date, program.preacher].forEach(value => {
+                    const cell = document.createElement("td");
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+                rows.appendChild(row);
+            });
+
+            message.className = "";
+            message.textContent = matches.length
+                ? matches.length + (matches.length === 1 ? " morning program" : " morning programs")
+                : programs.length
+                    ? "No morning programs match your search."
+                    : "No morning programs have been added in the dashboard yet.";
+        }
+
+        dateFilter.addEventListener("input", renderPrograms);
+        preacherFilter.addEventListener("input", renderPrograms);
+        window.addEventListener("storage", event => {
+            if (event.key === storageKey || event.key === null) loadPrograms();
+        });
+
+        loadPrograms();
+    </script>
+</body>
+</html>

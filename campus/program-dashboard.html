@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="church-logo.jpg" type="image/jpeg">
+<title>Program Dashboard</title>
+<style>
+  :root{--bg:#f3f5f2;--card:#fff;--ink:#1d2b2a;--muted:#5f6f6d;--line:#d9dfdb;--accent:#1f6f66;--danger:#b3402f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--ink)}
+  header{background:var(--accent);color:#fff;padding:20px 24px 0}
+  .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  header h1{margin:0;font-size:1.6rem;font-weight:normal}
+  header .top button{background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.5)}
+  .tabs{display:flex;gap:4px;flex-wrap:wrap}
+  .tab{background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:8px 8px 0 0;padding:10px 16px}
+  .tab.active{background:var(--bg);color:var(--accent)}
+  main{max-width:1100px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+  .card{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px}
+  h2{margin:0 0 12px;font-size:1.1rem}
+  form{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end}
+  label{display:grid;min-width:0;gap:4px;font-size:.9rem;color:var(--muted)}
+  input{min-width:0;max-width:100%;padding:9px;border:1px solid var(--line);border-radius:6px;font:inherit;color:var(--ink)}
+  input:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  button{padding:9px 14px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;font:inherit;cursor:pointer}
+  button.ghost{background:#fff;color:var(--accent)}
+  button.danger{background:#fff;color:var(--danger);border-color:var(--danger)}
+  .tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+  .tools input[type=search]{flex:1;min-width:160px}
+  .stats{display:flex;gap:24px;flex-wrap:wrap;color:var(--muted);font-size:.95rem}
+  .stats b{color:var(--ink);font-size:1.3rem;margin-right:4px}
+  .wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:640px}
+  th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}
+  th{font-weight:normal;color:var(--muted);font-size:.9rem}
+  td.actions{display:flex;gap:6px}
+  .empty{padding:20px;text-align:center;color:var(--muted)}
+  .status{font-size:.9rem;color:var(--muted)}
+  .status.ok{color:var(--accent)}
+  .status.bad{color:var(--danger)}
+  .photo-preview{display:block;width:100%;height:140px;object-fit:contain;background:#eef2ef;border-radius:6px}
+  .video-preview{display:block;width:100%;max-height:240px;background:#111;border-radius:6px}
+  header .status{color:#fff}
+  header .status.ok{color:#fff}
+  header .status.bad{color:#ffd7cf}
+  .site-nav{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 24px;padding:10px 20px;background:#173d39}
+  .brand-lockup{display:flex;flex:0 1 auto;align-items:center;justify-content:flex-start;gap:12px}
+  .site-links{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:4px 20px}
+  .site-brand{margin:0;color:#fff;text-align:center;font-size:1.15rem;font-weight:normal}
+  .site-logo{display:block;width:64px;height:64px;flex:0 0 64px;border-radius:50%;object-fit:contain;background:#000}
+  .site-nav a{color:#fff;text-decoration:none;padding:8px 4px}
+  .site-nav a:hover,.site-nav a:focus-visible{text-decoration:underline}
+  @media (max-width: 760px){
+    .site-nav{justify-content:flex-start;padding:10px 14px}
+    .site-links{justify-content:flex-start;width:100%;gap:4px 16px}
+  }
+  @media (max-width: 600px){
+    header{padding:16px 12px 0}
+    header h1{font-size:1.35rem}
+    main{margin:16px auto;padding:0 10px;gap:14px}
+    .card{padding:14px}
+    form{grid-template-columns:minmax(0,1fr)}
+    form input{width:100%;min-width:0}
+    .top{gap:8px}
+    .top button,.tab,button{padding:9px 10px}
+    .tools{align-items:stretch}
+    .tools input[type=search]{min-width:0}
+    .stats{gap:12px}
+    td.actions{flex-wrap:wrap}
+  }
+  @media (max-width: 380px){
+    header{padding-inline:8px}
+    main{padding-inline:8px}
+    .card{padding:10px}
+    .top button,.tab,button{font-size:.9rem}
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Program page shortcuts">
+  <div class="brand-lockup">
+    <img class="site-logo" src="church-logo.jpg" alt="Seventh-day Adventist logo">
+    <h2 class="site-brand">ESTG SDA church programs</h2>
+  </div>
+  <div class="site-links">
+    <a href="index.html">Home</a>
+    <a href="morning.html">Morning program</a>
+    <a href="school sabbath.html">Sabbath School</a>
+    <a href="preachers.html">Preachers</a>
+    <a href="https://www.academia.edu/123429509/Indirimbo_Zo_Guhimbaza_Imana_za_500_SDA_Church_500_" target="_blank" rel="noopener noreferrer">Songs of praise of God</a>
+    <a href="https://bibiliya.com/" target="_blank" rel="noopener noreferrer">Holy bible</a>
+    <a href="admin.html">Admin</a>
+  </div>
+</nav>
+<header>
+  <div class="top">
+    <h1 id="title">Program Dashboard</h1>
+    <button id="renameTitle" type="button">Rename dashboard</button>
+    <button id="saveNow" type="button">Save now</button>
+    <button id="signOut" type="button">Sign out</button>
+    <span id="status" class="status"></span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</header>
+
+<main>
+  <section class="card">
+    <h2 id="formTitle">Add an entry</h2>
+    <form id="entryForm"></form>
+  </section>
+
+  <section class="card">
+    <div class="stats">
+      <span><b id="count">0</b>entries</span>
+      <span><b id="leaders">0</b>leaders</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Weekly studies</h2>
+    <p>Add the teachers for this week's studies. These names appear read-only on the Sabbath School page.</p>
+    <form id="weeklyStudiesForm">
+      <label>First teacher
+        <input id="weeklyTeacher1" type="text" maxlength="120" placeholder="First teacher">
+      </label>
+      <label>Second teacher
+        <input id="weeklyTeacher2" type="text" maxlength="120" placeholder="Second teacher">
+      </label>
+      <label>Third teacher
+        <input id="weeklyTeacher3" type="text" maxlength="120" placeholder="Third teacher">
+      </label>
+      <label>Fourth teacher
+        <input id="weeklyTeacher4" type="text" maxlength="120" placeholder="Fourth teacher">
+      </label>
+      <label>Fifth teacher
+        <input id="weeklyTeacher5" type="text" maxlength="120" placeholder="Fifth teacher">
+      </label>
+      <label>Sixth teacher
+        <input id="weeklyTeacher6" type="text" maxlength="120" placeholder="Sixth teacher">
+      </label>
+      <button type="submit">Save weekly studies</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Home page rotating messages</h2>
+    <p>Add two messages to display on the home page. They will appear one after the other.</p>
+    <form id="homeMessagesForm">
+      <label>First message
+        <input id="homeMessageOne" type="text" maxlength="300" placeholder="Enter the first message">
+      </label>
+      <label>Second message
+        <input id="homeMessageTwo" type="text" maxlength="300" placeholder="Enter the second message">
+      </label>
+      <button type="submit">Save home messages</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Home page photos</h2>
+    <p>Choose up to three photos for the home page slideshow. Original image files are saved without resizing or recompression.</p>
+    <form id="homePhotosForm">
+      <label>Photo 1
+        <input id="homePhotoOne" type="file" accept="image/*">
+        <img id="homePhotoPreviewOne" class="photo-preview" alt="Preview of home photo 1" hidden>
+      </label>
+      <label>Photo 2
+        <input id="homePhotoTwo" type="file" accept="image/*">
+        <img id="homePhotoPreviewTwo" class="photo-preview" alt="Preview of home photo 2" hidden>
+      </label>
+      <label>Photo 3
+        <input id="homePhotoThree" type="file" accept="image/*">
+        <img id="homePhotoPreviewThree" class="photo-preview" alt="Preview of home photo 3" hidden>
+      </label>
+      <button type="submit">Save home photos</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Home page video</h2>
+    <p>Upload one video to play after the photo slideshow. The original video file is kept in browser storage.</p>
+    <form id="homeVideoForm">
+      <label>Choose a video
+        <input id="homeVideoFile" type="file" accept="video/*">
+      </label>
+      <video id="homeVideoPreview" class="video-preview" controls playsinline hidden></video>
+      <div class="tools" style="margin:0">
+        <button type="submit">Save home video</button>
+        <button type="button" class="ghost" id="removeHomeVideo">Remove video</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="tools">
+      <input id="search" type="search" placeholder="Search any name or date (e.g. 2026-10)">
+      <input id="dateFilter" type="date" title="Show only this date">
+      <button type="button" class="ghost" id="clearFilters">Clear</button>
+    </div>
+    <div class="tools">
+      <button type="button" class="ghost" id="renameSection">Rename this section</button>
+      <button type="button" class="ghost" id="renamePerson">Rename a name</button>
+    </div>
+    <div class="wrap">
+      <table>
+        <thead id="thead"></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="empty" class="empty" hidden>No entries yet. Add one above.</div>
+  </section>
+
+  <section class="card">
+    <div class="tools" style="margin:0">
+      <button type="button" class="ghost" id="exportBtn">Download data file</button>
+      <button type="button" class="ghost" id="importBtn">Load data file</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Each dashboard file needs its own KEY so saved data never mixes.
+  const KEY = "morningProgramDashboard";
+
+  // Fields per section: [id, label, type]
+  const SECTIONS = {
+    morning: { name: "Morning Program", fields: [
+      ["leader","Leader"], ["date","Date","date"], ["preacher","Preacher"]
+    ]},
+    worship: { name: "Worshipping Program", fields: [
+      ["leader","Leader"], ["lessonReader","Lesson reader"], ["preacher","Preacher"],
+      ["bookReader","Book reader"], ["lastPray","Last pray"], ["receiver","Receiver"],
+      ["choir","Choir"], ["date","Date","date"]
+    ]},
+    sabbath: { name: "Sabbath School", fields: [
+      ["leader","Leader"], ["prayerSong","Prayer within song"], ["lastReport","Last Sabbath report"],
+      ["creatorSpeaker","Creator speaker"], ["reporter","The reporter"], ["choir","Choir"],
+      ["date","Date","date"]
+    ]}
+  };
+
+  let state = { title: "Program Dashboard", names: {}, weeklyStudies: ["", "", "", "", "", ""], homeMessages: ["", ""], homePhotos: ["", "", ""], data: { morning: [], worship: [], sabbath: [] } };
+  let current = "morning";
+  let editingId = null;
+  const $ = id => document.getElementById(id);
+  const nameOf = k => state.names[k] || SECTIONS[k].name;
+
+  // ---- storage ----
+  function setStatus(text, cls) { $("status").textContent = text; $("status").className = "status " + (cls || ""); }
+  $("signOut").addEventListener("click", async () => {
+    try {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+        credentials: "same-origin"
+      });
+      if (!response.ok) throw new Error("Unable to sign out.");
+      window.location.assign("admin.html");
+    } catch (error) {
+      setStatus(error.message || "Unable to sign out. Check your connection and try again.", "bad");
+    }
+  });
+  function normalize(saved) {
+    if (!saved || typeof saved !== "object" || Array.isArray(saved)) {
+      throw new Error("Dashboard data must be a JSON object.");
+    }
+    if (Array.isArray(saved.entries)) {
+      state.data.morning = normalizeEntries(saved.entries, "morning");
+    }
+    if (typeof saved.title === "string" && saved.title.trim()) state.title = saved.title.trim();
+    if (saved.names && typeof saved.names === "object" && !Array.isArray(saved.names)) {
+      state.names = Object.fromEntries(
+        Object.entries(saved.names).filter(([key, value]) =>
+          Object.hasOwn(SECTIONS, key) && typeof value === "string"
+        )
+      );
+    }
+    if (Array.isArray(saved.weeklyStudies)) {
+      state.weeklyStudies = Array.from({ length: 6 }, (_, index) =>
+        typeof saved.weeklyStudies[index] === "string" ? saved.weeklyStudies[index] : ""
+      );
+    }
+    if (Array.isArray(saved.homeMessages)) {
+      state.homeMessages = [0, 1].map(index =>
+        typeof saved.homeMessages[index] === "string" ? saved.homeMessages[index] : ""
+      );
+    }
+    if (Array.isArray(saved.homePhotos)) {
+      state.homePhotos = [0, 1, 2].map(index =>
+        typeof saved.homePhotos[index] === "string" && saved.homePhotos[index].startsWith("data:image/")
+          ? saved.homePhotos[index]
+          : ""
+      );
+    }
+    if (saved.data && typeof saved.data === "object" && !Array.isArray(saved.data)) {
+      Object.keys(SECTIONS).forEach(key => {
+        if (!Array.isArray(saved.data[key])) return;
+        const requiredFields = SECTIONS[key].fields.map(([id]) => id);
+        state.data[key] = normalizeEntries(saved.data[key], key, requiredFields);
+      });
+    }
+  }
+  function normalizeEntries(entries, section, fields = SECTIONS[section].fields.map(([id]) => id)) {
+    return entries
+      .filter(entry =>
+        entry && typeof entry === "object" && !Array.isArray(entry) &&
+        fields.every(field => typeof entry[field] === "string")
+      )
+      .map((entry, index) => ({
+        ...entry,
+        id: typeof entry.id === "string" && entry.id
+          ? entry.id
+          : `import-${section}-${Date.now()}-${index}`
+      }));
+  }
+  function load() {
+    try {
+      const saved = localStorage.getItem(KEY);
+      if (saved) normalize(JSON.parse(saved));
+    } catch (e) {
+      setStatus("Unable to read saved dashboard data.", "bad");
+    }
+    state.weeklyStudies.forEach((teacher, index) => {
+      $("weeklyTeacher" + (index + 1)).value = teacher;
+    });
+    $("homeMessageOne").value = state.homeMessages[0];
+    $("homeMessageTwo").value = state.homeMessages[1];
+    state.homePhotos.forEach((photo, index) => {
+      const preview = $("homePhotoPreview" + ["One", "Two", "Three"][index]);
+      preview.src = photo;
+      preview.hidden = !photo;
+    });
+  }
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+      setStatus("Saved " + new Date().toLocaleTimeString(), "ok");
+      return true;
+    } catch (e) {
+      setStatus('Browser storage is full or unavailable. Use "Save now" to download your dashboard data.', "bad");
+      return false;
+    }
+  }
+  // "Save now": saves in the browser; if that is blocked, downloads a data file instead.
+  $("saveNow").onclick = () => {
+    if (save()) return;
+    $("exportBtn").click();
+  };
+  $("homeMessagesForm").addEventListener("submit", event => {
+    event.preventDefault();
+    state.homeMessages = [
+      $("homeMessageOne").value.trim(),
+      $("homeMessageTwo").value.trim()
+    ];
+    save();
+  });
+  $("weeklyStudiesForm").addEventListener("submit", event => {
+    event.preventDefault();
+    state.weeklyStudies = Array.from({ length: 6 }, (_, index) =>
+      $("weeklyTeacher" + (index + 1)).value.trim()
+    );
+    save();
+  });
+  function readOriginalHomePhoto(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === "string") resolve(reader.result);
+        else reject(new Error("Unable to read the selected photo."));
+      };
+      reader.onerror = () => reject(new Error("Unable to read the selected photo."));
+      reader.onabort = () => reject(new Error("Reading the selected photo was cancelled."));
+      reader.readAsDataURL(file);
+    });
+  }
+  $("homePhotosForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const suffixes = ["One", "Two", "Three"];
+    const selectedPhotos = suffixes.map(suffix => $("homePhoto" + suffix).files[0] || null);
+
+    if (selectedPhotos.every(file => !file) && state.homePhotos.every(photo => !photo)) {
+      setStatus("Choose at least one photo to save.", "bad");
+      return;
+    }
+
+    try {
+      const updatedPhotos = await Promise.all(selectedPhotos.map((file, index) =>
+        file ? readOriginalHomePhoto(file) : Promise.resolve(state.homePhotos[index])
+      ));
+      state.homePhotos = updatedPhotos;
+      state.homePhotos.forEach((photo, index) => {
+        const preview = $("homePhotoPreview" + suffixes[index]);
+        preview.src = photo;
+        preview.hidden = !photo;
+      });
+      save();
+    } catch (error) {
+      setStatus(error.message || "Unable to process the selected photos.", "bad");
+    }
+  });
+  const MEDIA_DB = "campusHomeMedia";
+  const MEDIA_STORE = "assets";
+  let dashboardVideoUrl = "";
+  function openMediaDatabase() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(MEDIA_DB, 1);
+      request.onupgradeneeded = () => request.result.createObjectStore(MEDIA_STORE);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(new Error("Unable to open browser media storage."));
+    });
+  }
+  async function readStoredVideo() {
+    const db = await openMediaDatabase();
+    return new Promise((resolve, reject) => {
+      const request = db.transaction(MEDIA_STORE, "readonly").objectStore(MEDIA_STORE).get("homeVideo");
+      request.onsuccess = () => {
+        db.close();
+        resolve(request.result || null);
+      };
+      request.onerror = () => {
+        db.close();
+        reject(new Error("Unable to load the saved home video."));
+      };
+    });
+  }
+  async function writeStoredVideo(video) {
+    const db = await openMediaDatabase();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(MEDIA_STORE, "readwrite");
+      if (video) transaction.objectStore(MEDIA_STORE).put(video, "homeVideo");
+      else transaction.objectStore(MEDIA_STORE).delete("homeVideo");
+      transaction.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      transaction.onerror = () => {
+        db.close();
+        reject(new Error("Unable to save the video. Browser storage may be full or unavailable."));
+      };
+      transaction.onabort = () => {
+        db.close();
+        reject(new Error("Saving the video was cancelled. Browser storage may be full or unavailable."));
+      };
+    });
+  }
+  function notifyHomeVideoChange() {
+    try {
+      localStorage.setItem("campusHomeMediaUpdated", String(Date.now()));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  async function showStoredDashboardVideo() {
+    try {
+      const video = await readStoredVideo();
+      const preview = $("homeVideoPreview");
+      if (dashboardVideoUrl) URL.revokeObjectURL(dashboardVideoUrl);
+      dashboardVideoUrl = video ? URL.createObjectURL(video) : "";
+      preview.hidden = !video;
+      if (video) preview.src = dashboardVideoUrl;
+      else preview.removeAttribute("src");
+    } catch (error) {
+      setStatus(error.message, "bad");
+    }
+  }
+  $("homeVideoForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const video = $("homeVideoFile").files[0];
+    if (!video) {
+      setStatus("Choose a video before saving.", "bad");
+      return;
+    }
+    if (!video.type.startsWith("video/")) {
+      setStatus("Choose a supported video file.", "bad");
+      return;
+    }
+    try {
+      await writeStoredVideo(video);
+      $("homeVideoFile").value = "";
+      await showStoredDashboardVideo();
+      const notified = notifyHomeVideoChange();
+      setStatus(
+        notified ? "Saved home video without recompression." : "Video saved. Reload the home page to display it.",
+        notified ? "ok" : "bad"
+      );
+    } catch (error) {
+      setStatus(error.message, "bad");
+    }
+  });
+  $("removeHomeVideo").addEventListener("click", async () => {
+    try {
+      await writeStoredVideo(null);
+      $("homeVideoFile").value = "";
+      await showStoredDashboardVideo();
+      const notified = notifyHomeVideoChange();
+      setStatus(notified ? "Removed home video." : "Video removed. Reload the home page to apply the change.", notified ? "ok" : "bad");
+    } catch (error) {
+      setStatus(error.message, "bad");
+    }
+  });
+  showStoredDashboardVideo();
+
+  // ---- building the page ----
+  function buildTabs() {
+    $("tabs").innerHTML = "";
+    Object.keys(SECTIONS).forEach(k => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "tab" + (k === current ? " active" : "");
+      b.textContent = nameOf(k);
+      b.onclick = () => { current = k; resetForm(); $("search").value = ""; $("dateFilter").value = ""; render(); };
+      $("tabs").appendChild(b);
+    });
+  }
+
+  function buildForm() {
+    const f = $("entryForm");
+    f.innerHTML = "";
+    SECTIONS[current].fields.forEach(([id, label, type]) => {
+      const l = document.createElement("label");
+      l.textContent = label + " ";
+      const i = document.createElement("input");
+      i.id = "f_" + id; i.type = type || "text"; i.required = true;
+      l.appendChild(i);
+      f.appendChild(l);
+    });
+    const box = document.createElement("div");
+    box.className = "tools"; box.style.margin = "0";
+    box.innerHTML = '<button type="submit" id="saveBtn">Add entry</button><button type="button" class="ghost" id="cancelBtn" hidden>Cancel</button>';
+    f.appendChild(box);
+    $("cancelBtn").onclick = resetForm;
+  }
+
+  function render() {
+    $("title").textContent = state.title;
+    document.title = state.title;
+    buildTabs();
+    buildForm();
+    $("formTitle").textContent = "Add an entry to " + nameOf(current);
+
+    const fields = SECTIONS[current].fields;
+    const q = $("search").value.trim().toLowerCase();
+    const day = $("dateFilter").value;
+    const all = state.data[current];
+    const list = all
+      .filter(e => !day || e.date === day)
+      .filter(e => fields.some(([id]) => String(e[id] || "").toLowerCase().includes(q)))
+      .sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+
+    $("thead").innerHTML = "";
+    const hr = document.createElement("tr");
+    [...fields.map(f => f[1]), "Actions"].forEach(t => { const th = document.createElement("th"); th.textContent = t; hr.appendChild(th); });
+    $("thead").appendChild(hr);
+
+    const body = $("rows");
+    body.innerHTML = "";
+    list.forEach(e => {
+      const tr = document.createElement("tr");
+      fields.forEach(([id]) => { const td = document.createElement("td"); td.textContent = e[id] || ""; tr.appendChild(td); });
+      const td = document.createElement("td");
+      td.className = "actions";
+      const edit = document.createElement("button");
+      edit.textContent = "Edit"; edit.className = "ghost"; edit.onclick = () => startEdit(e.id);
+      const del = document.createElement("button");
+      del.textContent = "Delete"; del.className = "danger"; del.onclick = () => removeEntry(e.id);
+      td.append(edit, del);
+      tr.appendChild(td);
+      body.appendChild(tr);
+    });
+
+    $("empty").hidden = list.length > 0;
+    $("count").textContent = all.length;
+    $("leaders").textContent = new Set(all.map(e => e.leader)).size;
+  }
+
+  // ---- add / edit ----
+  $("entryForm").addEventListener("submit", ev => {
+    ev.preventDefault();
+    const data = {};
+    SECTIONS[current].fields.forEach(([id, , type]) => {
+      const v = $("f_" + id).value;
+      data[id] = type === "date" ? v : v.trim();
+    });
+    if (Object.values(data).some(v => !v)) return;
+    if (editingId) Object.assign(state.data[current].find(e => e.id === editingId), data);
+    else state.data[current].push({ id: Date.now().toString(36), ...data });
+    resetForm(); save(); render();
+  });
+
+  function startEdit(id) {
+    const item = state.data[current].find(e => e.id === id);
+    editingId = id;
+    SECTIONS[current].fields.forEach(([fid]) => { $("f_" + fid).value = item[fid] || ""; });
+    $("formTitle").textContent = "Edit entry in " + nameOf(current);
+    $("saveBtn").textContent = "Save changes";
+    $("cancelBtn").hidden = false;
+    $("f_leader").focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function resetForm() {
+    editingId = null;
+    $("entryForm").reset();
+    if ($("saveBtn")) {
+      $("formTitle").textContent = "Add an entry to " + nameOf(current);
+      $("saveBtn").textContent = "Add entry";
+      $("cancelBtn").hidden = true;
+    }
+  }
+
+  // ---- delete ----
+  function removeEntry(id) {
+    if (!confirm("Delete this entry?")) return;
+    state.data[current] = state.data[current].filter(e => e.id !== id);
+    if (editingId === id) resetForm();
+    save(); render();
+  }
+
+  // ---- rename ----
+  $("renameTitle").onclick = () => {
+    const n = prompt("New dashboard name:", state.title);
+    if (n && n.trim()) { state.title = n.trim(); save(); render(); }
+  };
+  $("renameSection").onclick = () => {
+    const n = prompt("New name for this section:", nameOf(current));
+    if (n && n.trim()) { state.names[current] = n.trim(); save(); render(); }
+  };
+  $("renamePerson").onclick = () => {
+    const old = (prompt("Which name do you want to rename in " + nameOf(current) + "? (type it exactly)") || "").trim();
+    if (!old) return;
+    const textFields = SECTIONS[current].fields.filter(f => f[2] !== "date").map(f => f[0]);
+    const hits = state.data[current].filter(e => textFields.some(id => e[id] === old));
+    if (!hits.length) { alert("No entry in this section uses that name."); return; }
+    const neu = (prompt('Rename "' + old + '" to:') || "").trim();
+    if (!neu) return;
+    state.data[current].forEach(e => textFields.forEach(id => { if (e[id] === old) e[id] = neu; }));
+    save(); render();
+  };
+
+  // ---- search ----
+  $("search").addEventListener("input", render);
+  $("dateFilter").addEventListener("input", render);
+  $("clearFilters").onclick = () => { $("search").value = ""; $("dateFilter").value = ""; render(); };
+
+  // ---- download / load a data file ----
+  $("exportBtn").onclick = () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "program-dashboard-data.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+  $("importBtn").onclick = () => $("importFile").click();
+  $("importFile").onchange = ev => {
+    const file = ev.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const d = JSON.parse(reader.result);
+        if (!d || typeof d !== "object" || Array.isArray(d) ||
+            (!d.data && !Array.isArray(d.entries))) throw new Error("bad");
+        normalize(d); save(); render();
+      } catch (e) { setStatus("That file is not a valid dashboard data file.", "bad"); }
+    };
+    reader.readAsText(file);
+    ev.target.value = "";
+  };
+
+  load();
+  render();
+  const total = Object.values(state.data).reduce((n, a) => n + a.length, 0);
+  if (total) setStatus("Loaded " + total + " saved entries", "ok");
+</script>
+</body>
+</html>

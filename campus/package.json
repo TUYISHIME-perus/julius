@@ -1,0 +1,9 @@
+{
+  "name": "estg-sda-church-programs",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "test": "node --test"
+  }
+}
